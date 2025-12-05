@@ -13,8 +13,15 @@ load_dotenv()
 class Config:
     """Application configuration loaded from environment variables."""
     
+    # AI Provider Selection
+    AI_PROVIDER = os.getenv("AI_PROVIDER", "gemini").lower()  # 'gemini' or 'openai'
+    
     # Gemini API
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    
+    # OpenAI API
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # gpt-4o, gpt-4o-mini, gpt-4-turbo, etc.
     
     # Database Configuration
     DB_CONFIG = {
@@ -39,8 +46,16 @@ class Config:
     @classmethod
     def validate(cls) -> bool:
         """Validate required configuration values."""
-        if not cls.GEMINI_API_KEY:
-            raise ValueError("GEMINI_API_KEY is not set in environment variables")
+        # Validate AI provider
+        if cls.AI_PROVIDER not in ['gemini', 'openai']:
+            raise ValueError(f"AI_PROVIDER must be 'gemini' or 'openai', got: {cls.AI_PROVIDER}")
+        
+        # Validate API keys based on provider
+        if cls.AI_PROVIDER == 'gemini' and not cls.GEMINI_API_KEY:
+            raise ValueError("GEMINI_API_KEY is not set. Required when AI_PROVIDER=gemini")
+        
+        if cls.AI_PROVIDER == 'openai' and not cls.OPENAI_API_KEY:
+            raise ValueError("OPENAI_API_KEY is not set. Required when AI_PROVIDER=openai")
         
         required_db_keys = ['host', 'database', 'user', 'password', 'port']
         for key in required_db_keys:

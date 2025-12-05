@@ -1,13 +1,15 @@
 import streamlit as st
 import psycopg2
 import pandas as pd
-import google.generativeai as genai
 from config import Config
 from schema_agent import SchemaAgent
+from llm_service import get_llm_service
 
 # Validate and load configuration
 Config.validate()
-genai.configure(api_key=Config.GEMINI_API_KEY)
+
+# Initialize LLM service
+llm_service = get_llm_service()
 
 # ----------------------------------------------------
 # DATABASE CONNECTION
@@ -59,22 +61,6 @@ def display_memory():
     for m in st.session_state.memory:
         text += f"\nUser: {m['user']}\nMode: {m['mode']}\nBot: {m['content']}\n"
     return text
-
-# ----------------------------------------------------
-# SAFE TEXT ACCESSOR
-# ----------------------------------------------------
-def safe_text(resp):
-    """Safely extract text from Gemini response."""
-    try:
-        if (
-            resp and resp.candidates and
-            resp.candidates[0].content and
-            resp.candidates[0].content.parts
-        ):
-            return resp.text.strip()
-        return None
-    except:
-        return None
 
 # ----------------------------------------------------
 # SQL GENERATION RULES
@@ -152,6 +138,17 @@ with st.sidebar:
         extracted_at = schema_agent.schema_cache.get('extracted_at', 'Unknown')
         st.caption(f"Last extracted: {extracted_at[:19]}")
     
+    # AI Provider information
+    st.divider()
+    st.caption("🤖 AI Configuration")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.caption("Provider")
+        st.write(f"**{llm_service.get_provider_name()}**")
+    with col2:
+        st.caption("Model")
+        st.write(f"**{llm_service.get_model_name()[:15]}...**" if len(llm_service.get_model_name()) > 15 else f"**{llm_service.get_model_name()}**")
+    
     # Expandable full schema view
     with st.expander("View Full Schema"):
         st.text(schema_text)
@@ -190,12 +187,14 @@ User Query: "{user_query}"
 Analyze the query and decide the correct mode (SQL or CHAT).
 """
 
-        # Call Gemini
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        resp = model.generate_content(full_prompt)
-        raw = safe_text(resp)
+        # Call LLM (Gemini or OpenAI)
+        try:
+            raw = llm_service.generate_content(full_prompt)
+        except Exception as e:
+            st.error(f"⚠️ AI Error: {str(e)}")
+            st.stop()
 
-        if raw is None:
+        if raw is None or not raw.strip():
             st.error("⚠️ AI returned no content. Please try again.")
             st.stop()
 
@@ -295,8 +294,12 @@ Instructions:
 Provide a clear, friendly answer that directly addresses what they asked:
 """
 
-            resp2 = model.generate_content(explain_prompt)
-            explanation = safe_text(resp2) or "Query executed successfully."
+            try:
+                explanation = llm_service.generate_content(explain_prompt)
+                if not explanation:
+                    explanation = "Query executed successfully."
+            except Exception as e:
+                explanation = f"Query executed successfully. (Explanation generation failed: {str(e)})"
             
             st.subheader("💡 AI Explanation")
             st.write(explanation)
@@ -316,4 +319,4 @@ Provide a clear, friendly answer that directly addresses what they asked:
 
 # Footer
 st.divider()
-st.caption("🔒 Using read-only database access • 🤖 Powered by Gemini AI • 💾 Schema auto-cached")
+st.caption(f"🔒 Read-only database • 🤖 Powered by {llm_service.get_provider_name()} ({llm_service.get_model_name()}) • 💾 Schema auto-cached")
