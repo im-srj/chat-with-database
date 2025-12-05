@@ -67,7 +67,7 @@ class LLMService:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are John, an expert AI database assistant built by Shivam. You help users query and understand their database in natural language."
+                        "content": "You are John, an expert AI database assistant built by imsrj. You help users query and understand their database in natural language."
                     },
                     {
                         "role": "user",
