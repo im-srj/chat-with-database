@@ -1,0 +1,66 @@
+# Environment variables and secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Application specific
+schema_cache.json
+app.log
+*.log
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Backup files
+main_old.py
+main_old_backup.py
+*_backup.py
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Database dumps
+*.sql.gz
+*.dump
+
+# Temporary files
+*.tmp
+temp/
+tmp/
