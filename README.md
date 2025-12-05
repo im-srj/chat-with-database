@@ -1,7 +1,7 @@
-# Production-Ready AI Database Manager
+# Chat With Database
 
 ## 🎯 Overview
-This is a production-ready AI-powered database query assistant that dynamically extracts and uses your PostgreSQL database schema. No more hardcoded schemas!
+This is a production-ready AI-powered database query assistant that dynamically extracts and uses your PostgreSQL database schema.
 
 ## ✨ Key Features
 
@@ -31,13 +31,12 @@ This is a production-ready AI-powered database query assistant that dynamically 
 
 ```
 AI_Database_Engineer/
-├── main_v2.py              # New production-ready main application
+├── main.py                 # production-ready main application
 ├── schema_agent.py         # Schema extraction and management agent
 ├── config.py               # Configuration management
 ├── .env.example            # Environment variables template
 ├── .env                    # Your actual credentials (create this)
 ├── requirements.txt        # Python dependencies
-├── main.py                 # Old version (backup)
 └── README_NEW.md          # This file
 ```
 
@@ -108,7 +107,7 @@ pip install -r requirements.txt
 ### Step 4: Run the Application
 
 ```bash
-streamlit run main_v2.py
+streamlit run main.py
 ```
 
 ## 🔧 How It Works
@@ -149,21 +148,6 @@ Gemini AI (generates SQL) → PostgreSQL (executes) → Results Display
    - Executes with timeout protection
    - Returns results with explanation
 
-## 🎨 New Features vs Old Version
-
-| Feature | Old (`main.py`) | New (`main_v2.py`) |
-|---------|----------------|-------------------|
-| Schema | Hardcoded | Dynamic extraction |
-| Database Size | Small only | Any size |
-| Configuration | Hardcoded | Environment-based |
-| Caching | None | Intelligent caching |
-| Security | Basic | Production-ready |
-| Error Handling | Basic | Comprehensive |
-| Schema Updates | Manual code edit | Automatic |
-| Read-only User | Optional | Required |
-| Query Timeout | None | Configurable |
-| Result Limits | None | Configurable |
-
 ## 🔒 Security Features
 
 1. **Read-Only Access**: Only SELECT queries allowed
@@ -195,7 +179,6 @@ MAX_MEMORY_ROUNDS=5
 
 ### Sidebar Features
 - **Total Tables**: Shows number of tables in database
-- **Foreign Keys**: Shows relationship count
 - **Last Extracted**: Timestamp of schema extraction
 - **View Full Schema**: Expandable schema view
 - **Refresh Schema**: Force reload from database
