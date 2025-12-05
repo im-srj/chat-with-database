@@ -220,19 +220,6 @@ MAX_MEMORY_ROUNDS=5
 ### Issue: "Too many rows"
 **Solution**: Increase `MAX_RESULT_ROWS` or add LIMIT to your query
 
-## 🚀 Migration from Old Version
-
-To migrate from `main.py` to `main_v2.py`:
-
-1. ✅ Create `.env` file with your credentials
-2. ✅ Create read-only PostgreSQL user
-3. ✅ Test connection: `python -c "from config import Config; Config.validate()"`
-4. ✅ Run new version: `streamlit run main_v2.py`
-5. ✅ Verify schema extraction works
-6. ✅ Test few queries
-7. ✅ Rename `main.py` to `main_old.py` (backup)
-8. ✅ Rename `main_v2.py` to `main.py` (production)
-
 ## 📈 Performance Tips
 
 1. **Large Databases**: Schema extraction takes 2-10 seconds initially, then cached
