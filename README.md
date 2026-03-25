@@ -227,7 +227,7 @@ MAX_MEMORY_ROUNDS=5
 3. **Query Optimization**: AI learns from previous queries in memory
 4. **Result Limits**: Lower `MAX_RESULT_ROWS` for faster response
 
-## 🔮 Future Enhancements
+<!--## 🔮 Future Enhancements
 
 - [ ] Table-specific schema loading (for very large DBs)
 - [ ] Query history and favorites
@@ -235,7 +235,7 @@ MAX_MEMORY_ROUNDS=5
 - [ ] Query performance analytics
 - [ ] Multi-database support
 - [ ] Custom LLM model selection
-- [ ] Real-time schema change detection
+- [ ] Real-time schema change detection-->
 
 ## 📝 Notes for Production
 
